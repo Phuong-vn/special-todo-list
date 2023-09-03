@@ -12,6 +12,14 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
 
+### Work in dev folder
+
+```sh
+cd dev
+```
+
+### Install packages and dependencies
+
 ```sh
 npm install
 ```
@@ -33,3 +41,6 @@ npm run build
 ```sh
 npm run lint
 ```
+
+## App specs
+[Specifications](./app-specs.md)
