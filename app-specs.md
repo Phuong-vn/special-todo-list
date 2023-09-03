@@ -1,6 +1,6 @@
 # Functionality
 
-## No todos
+## No todos ==> done
 When there are no todos, `#main` and `#footer` should be hidden.
 
 ## New todo
