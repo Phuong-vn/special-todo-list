@@ -1,14 +1,17 @@
-// import { reactive } from 'vue';
+import { reactive } from "vue";
 
-const todoList = localStorage.getItem('todoList') || [];
+const todoListStorage = localStorage.getItem('todoList') || [];
+const todoList = reactive(todoListStorage)
 
 let length = todoList.length
 
 const addTodo = (value) => {
+  if (value.trim() === '') return;
   todoList.push({
     id: length + 1,
-    description:value
+    description: value
   });
+  console.log('🚀 ~ addTodo ~ todoList:', todoList)
 }
 
-export default { todoList, addTodo };
+export { todoList, addTodo };

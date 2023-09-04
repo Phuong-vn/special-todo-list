@@ -1,10 +1,5 @@
 <script setup>
-import { onMounted } from 'vue';
 import { todoList } from '../store.js';
-
-onMounted(() => {
-  console.log(todoList);
-})
 
 </script>
 <template>
