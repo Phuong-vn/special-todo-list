@@ -37,15 +37,15 @@ const focusInput = async event => {
             @change="toggleTodoCompleted(item.id)"
           >
           <label
-            @dblclick="event => {initEdit(item.id, item.description), focusInput(event)}"
+            @dblclick="event => {initEdit(item.id, item.title), focusInput(event)}"
           >
-            {{ item.description }}
+            {{ item.title }}
           </label>
           <button class="destroy"></button>
         </div>
         <input
           class="edit"
-          :value="item.description"
+          :value="item.title"
           @input="event => { editing(event.target.value) }"
           @keyup.enter="completeEdit(item.id)"
           @blur="escapeEdit(item.id, $event)"

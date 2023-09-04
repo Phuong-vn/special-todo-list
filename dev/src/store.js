@@ -1,24 +1,11 @@
 import { ref, reactive, computed } from "vue";
 
-const todoListStorage = localStorage.getItem('todoList') || [
-  {
-    id: 1,
-    description: 'learn javascript',
-    isCompleted: true,
-    isEditing: false
-  },
-  {
-    id: 2,
-    description: 'learn vue js',
-    isCompleted: false,
-    isEditing: false
-  },
-];
-const todoList = reactive(todoListStorage);
+const todoListStorage = localStorage.getItem('todos-vue') || '[]';
+const todoList = reactive(JSON.parse(todoListStorage));
 
 const isAllCompleted = ref(false);
 
-const editingDescription = ref('');
+const editingTitle = ref('');
 
 const isCancelEditing = ref(false);
 
@@ -40,11 +27,12 @@ const addTodo = (value) => {
   if (value.trim() === '') return;
   const newTodo = {
     id: todoList.length + 1,
-    description: value,
+    title: value,
     isCompleted: false,
     isEditing: false
   };
   todoList.push(newTodo);
+  saveToLocalStorage();
 };
 
 const toggleAll = () => {
@@ -58,6 +46,7 @@ const toggleAll = () => {
     });
   }
   updateIsAllCompleted();
+  saveToLocalStorage();
 };
 
 const updateIsAllCompleted = () => {
@@ -68,36 +57,38 @@ const toggleTodoCompleted = (id) => {
   const todo = todoList.find(todo => todo.id === id);
   todo.isCompleted = !todo.isCompleted;
   updateIsAllCompleted();
+  saveToLocalStorage();
 };
 
 const initEdit = (id, value) => {
   todoList.find(todo => todo.id === id).isEditing = true;
-  editingDescription.value = value;
+  editingTitle.value = value;
 };
 
 const editing = (value) => {
-  editingDescription.value = value.trim();
+  editingTitle.value = value.trim();
   isCancelEditing.value = false;
 };
 
 const completeEdit = (id) => {
-  if (editingDescription.value.trim()) {
+  if (editingTitle.value.trim()) {
     const todo = todoList.find(todo => todo.id === id);
-    todo.description = editingDescription.value;
+    todo.title = editingTitle.value;
     todo.isEditing = false;
   } else {
     removeTodo(id);
     isCancelEditing.value = true;
   }
+  saveToLocalStorage();
 };
 
 const escapeEdit = (id, event) => {
   const todo = todoList.find(todo => todo.id === id);
   if (!todo) return;
 
-  if (editingDescription.value.trim()) {
+  if (editingTitle.value.trim()) {
     if (event.type === 'blur' && !isCancelEditing.value) {
-      todo.description = editingDescription.value;
+      todo.title = editingTitle.value;
     } else {
       isCancelEditing.value = true;
     }
@@ -110,18 +101,30 @@ const escapeEdit = (id, event) => {
       todo.isEditing = false;
     }
   }
+
+  saveToLocalStorage();
 };
 
 const removeTodo = (id) => {
   const index = todoList.findIndex(todo => todo.id === id);
   if (index === -1) return;
   todoList.splice(index, 1);
+  saveToLocalStorage();
 };
 
 const clearCompletedTodo = () => {
   todoList.forEach(todo => {
     todo.isCompleted = false;
   })
+  saveToLocalStorage();
+};
+
+const saveToLocalStorage = () => {
+  localStorage.setItem('todos-vue', JSON.stringify(todoList.map(todo => ({
+    id: todo.id,
+    title: todo.title,
+    isCompleted: todo.isCompleted,
+  }))));
 };
 
 export { todoList, addTodo, toggleAll, isAllCompleted, toggleTodoCompleted, initEdit, editing, completeEdit, escapeEdit, activeTodoCounterMsg, clearCompletedTodo, isShowClearCompletedBtn };
