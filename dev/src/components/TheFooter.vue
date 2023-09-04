@@ -1,12 +1,12 @@
 <script setup>
-import { todoList } from '../store.js';
+import { todoList, activeTodoCounterMsg, clearCompletedTodo, isShowClearCompletedBtn } from '../store.js';
 
 </script>
 
 <template>
   <footer class="footer" v-if="todoList.length">
     <!-- This should be `0 items left` by default -->
-    <span class="todo-count"><strong>0</strong> item left</span>
+    <span class="todo-count" v-html="activeTodoCounterMsg"></span>
     <!-- Remove this if you don't implement routing -->
     <ul class="filters">
       <li>
@@ -20,6 +20,12 @@ import { todoList } from '../store.js';
       </li>
     </ul>
     <!-- Hidden if no completed items are left ↓ -->
-    <button class="clear-completed">Clear completed</button>
+    <button
+      class="clear-completed"
+      @click="clearCompletedTodo()"
+      v-show="isShowClearCompletedBtn"
+    >
+      Clear completed
+    </button>
   </footer>
 </template>

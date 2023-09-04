@@ -15,16 +15,16 @@ A todo item has three possible interactions:
 2. Double-clicking the `<label>` activates editing mode, by toggling the `.editing` class on its `<li>`
 3. Hovering over the todo shows the remove button (`.destroy`)
 
-## Editing => ready to go
+## Editing => wait for check
 When editing mode is activated it will hide the other controls and bring forward an input that contains the todo title, which should be focused (`.focus()`). The edit should be saved on both blur and enter, and the `editing` class should be removed. Make sure to `.trim()` the input and then check that it's not empty. If it's empty the todo should instead be destroyed. If escape is pressed during the edit, the edit state should be left and any changes be discarded.
 
-## Counter => ready to go
+## Counter => wait for check
 Displays the number of active todos in a pluralized form. Make sure the number is wrapped by a `<strong>` tag. Also make sure to pluralize the `item` word correctly: `0 items`, `1 item`, `2 items`. Example: 2 items left
 
-## Clear completed button => ready to go
+## Clear completed button => wait for check
 Removes completed todos when clicked. Should be hidden when there are no completed todos.
 
-## Persistence => ready to go
+## Persistence => in progress
 Your app should dynamically persist the todos to localStorage. If the framework has capabilities for persisting data (e.g. Backbone.sync), use that. Otherwise, use vanilla localStorage. If possible, use the keys `id`, `title`, `completed` for each item. Make sure to use this format for the localStorage name: `todos-[framework]`. Editing mode should not be persisted.
 
 ## Routing => ready to go

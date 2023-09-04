@@ -1,10 +1,6 @@
 <script setup>
-import { onUpdated, nextTick } from "vue";
-import { todoList, toggleAll, isAllCompleted, toggleTodoCompleted, initEdit, editing, completeEdit } from '../store.js';
-
-onUpdated(() => {
-  // console.log(isAllCompleted.value);
-});
+import { nextTick } from "vue";
+import { todoList, toggleAll, isAllCompleted, toggleTodoCompleted, initEdit, editing, completeEdit, escapeEdit } from '../store.js';
 
 const focusInput = async event => {
   await nextTick();
@@ -41,7 +37,7 @@ const focusInput = async event => {
             @change="toggleTodoCompleted(item.id)"
           >
           <label
-            @dblclick="event => {initEdit(item.id), focusInput(event)}"
+            @dblclick="event => {initEdit(item.id, item.description), focusInput(event)}"
           >
             {{ item.description }}
           </label>
@@ -50,8 +46,10 @@ const focusInput = async event => {
         <input
           class="edit"
           :value="item.description"
-          @input="event => { editing(event.target.value, item.id) }"
-          @blur="completeEdit(item.id)"
+          @input="event => { editing(event.target.value) }"
+          @keyup.enter="completeEdit(item.id)"
+          @blur="escapeEdit(item.id, $event)"
+          @keyup.esc="escapeEdit(item.id, $event)"
         >
       </li>
     </ul>
