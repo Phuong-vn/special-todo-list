@@ -1,10 +1,23 @@
 <script setup>
 import { nextTick } from "vue";
-import { todoList, toggleAll, isAllCompleted, toggleTodoCompleted, initEdit, editing, completeEdit, escapeEdit } from '../store.js';
+import { todoList, toggleAll, isAllCompleted, toggleTodoCompleted, initEdit, editing, completeEdit, escapeEdit, removeTodo } from '../store.js';
+
+const props = defineProps({
+  route: String
+})
 
 const focusInput = async event => {
   await nextTick();
   event.target.closest('li.editing').querySelector('.edit').focus();
+};
+
+const getCurrentTodoList = () => {
+  if (props.route === '/active') {
+    return todoList.filter(todo => !todo.isCompleted);
+  } else if (props.route === '/completed') {
+    return todoList.filter(todo => todo.isCompleted);
+  }
+  return todoList;
 };
 
 </script>
@@ -25,7 +38,7 @@ const focusInput = async event => {
     </label>
     <ul class="todo-list">
       <li
-        v-for="item in todoList"
+        v-for="item in getCurrentTodoList()"
         :key="item.id"
         :class="{ 'completed': item.isCompleted, 'editing': item.isEditing }"
       >
@@ -41,7 +54,7 @@ const focusInput = async event => {
           >
             {{ item.title }}
           </label>
-          <button class="destroy"></button>
+          <button class="destroy" @click="removeTodo(item.id)"></button>
         </div>
         <input
           class="edit"
@@ -53,24 +66,5 @@ const focusInput = async event => {
         >
       </li>
     </ul>
-
-      <!-- These are here just to show the structure of the list items -->
-      <!-- List items should get the class `editing` when editing and `completed` when marked as completed -->
-      <!-- <li class="completed">
-        <div class="view">
-          <input class="toggle" type="checkbox" checked>
-          <label>Taste JavaScript</label>
-          <button class="destroy"></button>
-        </div>
-        <input class="edit" value="Create a TodoMVC template">
-      </li>
-      <li>
-        <div class="view">
-          <input class="toggle" type="checkbox">
-          <label>Buy a unicorn</label>
-          <button class="destroy"></button>
-        </div>
-        <input class="edit" value="Rule the web">
-      </li> -->
   </section>
 </template>

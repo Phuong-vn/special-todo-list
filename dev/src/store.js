@@ -127,4 +127,4 @@ const saveToLocalStorage = () => {
   }))));
 };
 
-export { todoList, addTodo, toggleAll, isAllCompleted, toggleTodoCompleted, initEdit, editing, completeEdit, escapeEdit, activeTodoCounterMsg, clearCompletedTodo, isShowClearCompletedBtn };
+export { todoList, addTodo, toggleAll, isAllCompleted, toggleTodoCompleted, initEdit, editing, completeEdit, escapeEdit, activeTodoCounterMsg, clearCompletedTodo, isShowClearCompletedBtn, removeTodo };

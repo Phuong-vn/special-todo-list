@@ -1,5 +1,21 @@
 <script setup>
 import { todoList, activeTodoCounterMsg, clearCompletedTodo, isShowClearCompletedBtn } from '../store.js';
+import { ref, computed } from 'vue';
+
+const currentPath = ref(window.location.hash);
+
+window.addEventListener('hashchange', () => {
+  currentPath.value = window.location.hash;
+})
+
+const currentView = computed(() => {
+  if (currentPath.value.slice(1) === '/active') {
+    return 'active';
+  } else if (currentPath.value.slice(1) === '/completed') {
+    return 'completed';
+  }
+  return '/';
+})
 
 </script>
 
@@ -10,13 +26,13 @@ import { todoList, activeTodoCounterMsg, clearCompletedTodo, isShowClearComplete
     <!-- Remove this if you don't implement routing -->
     <ul class="filters">
       <li>
-        <a class="selected" href="#/">All</a>
+        <a :class="{ 'selected': currentView === '/'}" href="#/">All</a>
       </li>
       <li>
-        <a href="#/active">Active</a>
+        <a :class="{ 'selected': currentView === '/active'}" href="#/active">Active</a>
       </li>
       <li>
-        <a href="#/completed">Completed</a>
+        <a :class="{ 'selected': currentView === '/completed'}" href="#/completed">Completed</a>
       </li>
     </ul>
     <!-- Hidden if no completed items are left ↓ -->
