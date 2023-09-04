@@ -1,22 +1,58 @@
 <script setup>
-import { todoList } from '../store.js';
+import { onUpdated, nextTick } from "vue";
+import { todoList, toggleAll, isAllCompleted, toggleTodoCompleted, initEdit, editing, completeEdit } from '../store.js';
+
+onUpdated(() => {
+  // console.log(isAllCompleted.value);
+});
+
+const focusInput = async event => {
+  await nextTick();
+  event.target.closest('li.editing').querySelector('.edit').focus();
+};
+
 </script>
 
 <template>
-  <section class="main" v-if="todoList">
-    <input id="toggle-all" class="toggle-all" type="checkbox">
-    <label for="toggle-all">Mark all as complete</label>
+  <section class="main" v-if="todoList.length">
+    <input
+      id="toggle-all"
+      class="toggle-all"
+      type="checkbox"
+      :checked="isAllCompleted.value"
+    >
+    <label
+      for="toggle-all"
+      @click="toggleAll()"
+    >
+      Mark all as complete
+    </label>
     <ul class="todo-list">
       <li
         v-for="item in todoList"
         :key="item.id"
+        :class="{ 'completed': item.isCompleted, 'editing': item.isEditing }"
       >
         <div class="view">
-          <input class="toggle" type="checkbox">
-          <label>{{ item.description }}</label>
+          <input
+            class="toggle"
+            type="checkbox"
+            :checked="item.isCompleted"
+            @change="toggleTodoCompleted(item.id)"
+          >
+          <label
+            @dblclick="event => {initEdit(item.id), focusInput(event)}"
+          >
+            {{ item.description }}
+          </label>
           <button class="destroy"></button>
         </div>
-        <input class="edit" value="Rule the web">
+        <input
+          class="edit"
+          :value="item.description"
+          @input="event => { editing(event.target.value, item.id) }"
+          @blur="completeEdit(item.id)"
+        >
       </li>
     </ul>
 
