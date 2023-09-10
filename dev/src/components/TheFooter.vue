@@ -1,12 +1,8 @@
 <script setup>
-import { todoList, activeTodoCounterMsg, clearCompletedTodo, isShowClearCompletedBtn } from '../store.js';
 import { ref, computed } from 'vue';
+import { todoList, clearCompletedTodo } from '../store.js';
 
 const currentPath = ref(window.location.hash);
-
-window.addEventListener('hashchange', () => {
-  currentPath.value = window.location.hash;
-})
 
 const currentView = computed(() => {
   if (currentPath.value.slice(1) === '/active') {
@@ -15,15 +11,21 @@ const currentView = computed(() => {
     return 'completed';
   }
   return '/';
-})
+});
+
+const activeTodoCounter = computed(() => todoList.filter(todo => !todo.isCompleted).length);
+const activeTodoCounterMsg = computed(() => `<strong>${activeTodoCounter.value}</strong> ${activeTodoCounter.value < 2 ? 'item' : 'items'} left`);
+const isShowClearCompletedBtn = computed(() => activeTodoCounter.value !== todoList.length);
+
+window.addEventListener('hashchange', () => {
+  currentPath.value = window.location.hash;
+});
 
 </script>
 
 <template>
   <footer class="footer" v-if="todoList.length">
-    <!-- This should be `0 items left` by default -->
     <span class="todo-count" v-html="activeTodoCounterMsg"></span>
-    <!-- Remove this if you don't implement routing -->
     <ul class="filters">
       <li>
         <a :class="{ 'selected': currentView === '/'}" href="#/">All</a>
@@ -35,10 +37,9 @@ const currentView = computed(() => {
         <a :class="{ 'selected': currentView === '/completed'}" href="#/completed">Completed</a>
       </li>
     </ul>
-    <!-- Hidden if no completed items are left ↓ -->
     <button
       class="clear-completed"
-      @click="clearCompletedTodo()"
+      @click="clearCompletedTodo"
       v-show="isShowClearCompletedBtn"
     >
       Clear completed

@@ -2,8 +2,7 @@
 import { ref } from 'vue';
 import { addTodo } from '../store';
 
-let todoValue = ref('');
-
+const todoValue = ref('');
 const clearValue = () => {
   todoValue.value = '';
 };

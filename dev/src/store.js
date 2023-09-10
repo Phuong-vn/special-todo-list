@@ -1,27 +1,11 @@
-import { ref, reactive, computed } from "vue";
+import { ref, reactive } from "vue";
 
-const todoListStorage = localStorage.getItem('todos-vue') || '[]';
+const todoListName = 'todos-vue';
+const todoListStorage = localStorage.getItem(todoListName) || '[]';
 const todoList = reactive(JSON.parse(todoListStorage));
-
 const isAllCompleted = ref(false);
-
 const editingTitle = ref('');
-
 const isCancelEditing = ref(false);
-
-const activeTodoCounter = computed(() => todoList.filter(todo => !todo.isCompleted).length);
-
-const activeTodoCounterMsg = computed(() => {
-  if (activeTodoCounter.value < 2) {
-    return `<strong>${activeTodoCounter.value}</strong> item left`;
-  } else {
-    return `<strong>${activeTodoCounter.value}</strong> items left`;
-  }
-});
-
-const isShowClearCompletedBtn = computed(() => {
-  return activeTodoCounter.value !== todoList.length;
-});
 
 const addTodo = (value) => {
   if (value.trim() === '') return;
@@ -36,15 +20,9 @@ const addTodo = (value) => {
 };
 
 const toggleAll = () => {
-  if (isAllCompleted.value) {
-    todoList.forEach(todo => {
-      todo.isCompleted = false;
-    });
-  } else {
-    todoList.forEach(todo => {
-      todo.isCompleted = true;
-    });
-  }
+  todoList.forEach(todo => {
+    todo.isCompleted = !isAllCompleted.value;
+  });
   updateIsAllCompleted();
   saveToLocalStorage();
 };
@@ -120,11 +98,11 @@ const clearCompletedTodo = () => {
 };
 
 const saveToLocalStorage = () => {
-  localStorage.setItem('todos-vue', JSON.stringify(todoList.map(todo => ({
+  localStorage.setItem(todoListName, JSON.stringify(todoList.map(todo => ({
     id: todo.id,
     title: todo.title,
     isCompleted: todo.isCompleted,
   }))));
 };
 
-export { todoList, addTodo, toggleAll, isAllCompleted, toggleTodoCompleted, initEdit, editing, completeEdit, escapeEdit, activeTodoCounterMsg, clearCompletedTodo, isShowClearCompletedBtn, removeTodo };
+export { todoList, addTodo, toggleAll, isAllCompleted, toggleTodoCompleted, initEdit, editing, completeEdit, escapeEdit, clearCompletedTodo, removeTodo };
