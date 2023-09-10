@@ -1,6 +1,8 @@
 <script setup>
 import { nextTick } from 'vue';
-import { todoList, toggleAll, isAllCompleted, toggleTodoCompleted, initEdit, editing, completeEdit, escapeEdit, removeTodo } from '../stores/todo';
+import { useTodoStore } from '../stores/todo';
+
+const store = useTodoStore();
 
 const props = defineProps({
   route: String
@@ -13,27 +15,27 @@ const focusInput = async event => {
 
 const getCurrentTodoList = () => {
   if (props.route === '/active') {
-    return todoList.filter(todo => !todo.isCompleted);
+    return store.todoList.filter(todo => !todo.isCompleted);
   } else if (props.route === '/completed') {
-    return todoList.filter(todo => todo.isCompleted);
+    return store.todoList.filter(todo => todo.isCompleted);
   }
-  return todoList;
+  return store.todoList;
 };
 
 </script>
 
 <template>
-  <section class="main" v-if="todoList.length">
+  <section class="main" v-if="store.todoList.length">
     <label
     for="toggle-all"
     class="toggle-all-label"
-    @click="toggleAll"
+    @click="store.toggleAll"
     >
       <input
         id="toggle-all"
         class="toggle-all"
         type="checkbox"
-        :checked="isAllCompleted"
+        :checked="store.isAllCompleted"
       >
       <span>❯</span>
     </label>
@@ -48,22 +50,22 @@ const getCurrentTodoList = () => {
             class="toggle"
             type="checkbox"
             :checked="item.isCompleted"
-            @change="toggleTodoCompleted(item.id)"
+            @change="store.toggleTodoCompleted(item.id)"
           >
           <label
-            @dblclick="event => {initEdit(item.id, item.title), focusInput(event)}"
+            @dblclick="event => {store.initEdit(item.id, item.title), focusInput(event)}"
           >
             {{ item.title }}
           </label>
-          <button class="destroy" @click="removeTodo(item.id)"></button>
+          <button class="destroy" @click="store.removeTodo(item.id)"></button>
         </div>
         <input
           class="edit"
           :value="item.title"
-          @input="event => { editing(event.target.value) }"
-          @keyup.enter="completeEdit(item.id)"
-          @blur="escapeEdit(item.id, $event)"
-          @keyup.esc="escapeEdit(item.id, $event)"
+          @input="event => { store.editing(event.target.value) }"
+          @keyup.enter="store.completeEdit(item.id)"
+          @blur="store.escapeEdit(item.id, $event)"
+          @keyup.esc="store.escapeEdit(item.id, $event)"
         >
       </li>
     </ul>

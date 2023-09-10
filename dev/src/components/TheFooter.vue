@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { todoList, clearCompletedTodo } from '../stores/todo';
+import { useTodoStore } from '../stores/todo';
+
+const store = useTodoStore();
 
 const currentPath = ref(window.location.hash);
 
@@ -13,9 +15,9 @@ const currentView = computed(() => {
   return '/';
 });
 
-const activeTodoCounter = computed(() => todoList.filter(todo => !todo.isCompleted).length);
+const activeTodoCounter = computed(() => store.todoList.filter(todo => !todo.isCompleted).length);
 const activeTodoCounterMsg = computed(() => `<strong>${activeTodoCounter.value}</strong> ${activeTodoCounter.value < 2 ? 'item' : 'items'} left`);
-const isShowClearCompletedBtn = computed(() => activeTodoCounter.value !== todoList.length);
+const isShowClearCompletedBtn = computed(() => activeTodoCounter.value !== store.todoList.length);
 
 window.addEventListener('hashchange', () => {
   currentPath.value = window.location.hash;
@@ -24,7 +26,7 @@ window.addEventListener('hashchange', () => {
 </script>
 
 <template>
-  <footer class="footer" v-if="todoList.length">
+  <footer class="footer" v-if="store.todoList.length">
     <span class="todo-count" v-html="activeTodoCounterMsg"></span>
     <ul class="filters">
       <li>
@@ -39,7 +41,7 @@ window.addEventListener('hashchange', () => {
     </ul>
     <button
       class="clear-completed"
-      @click="clearCompletedTodo"
+      @click="store.clearCompletedTodo"
       v-show="isShowClearCompletedBtn"
     >
       Clear completed
