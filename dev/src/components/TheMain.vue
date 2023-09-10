@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, onUpdated } from 'vue';
+import { nextTick } from 'vue';
 import { todoList, toggleAll, isAllCompleted, toggleTodoCompleted, initEdit, editing, completeEdit, escapeEdit, removeTodo } from '../store.js';
 
 const props = defineProps({
@@ -19,10 +19,6 @@ const getCurrentTodoList = () => {
   }
   return todoList;
 };
-
-onUpdated(() => {
-  console.log(isAllCompleted.value);
-});
 
 </script>
 
