@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { addTodo } from '../store';
+import { addTodo } from '../stores/todo';
 
 const todoValue = ref('');
 const clearValue = () => {

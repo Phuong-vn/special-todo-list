@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { todoList, clearCompletedTodo } from '../store.js';
+import { todoList, clearCompletedTodo } from '../stores/todo';
 
 const currentPath = ref(window.location.hash);
 

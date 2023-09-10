@@ -1,6 +1,6 @@
 <script setup>
 import { nextTick } from 'vue';
-import { todoList, toggleAll, isAllCompleted, toggleTodoCompleted, initEdit, editing, completeEdit, escapeEdit, removeTodo } from '../store.js';
+import { todoList, toggleAll, isAllCompleted, toggleTodoCompleted, initEdit, editing, completeEdit, escapeEdit, removeTodo } from '../stores/todo';
 
 const props = defineProps({
   route: String
