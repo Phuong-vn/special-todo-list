@@ -28,7 +28,7 @@ const toggleAll = () => {
 };
 
 const updateIsAllCompleted = () => {
-  isAllCompleted.value = !todoList.some(todo => !todo.isCompleted)
+  isAllCompleted.value = !todoList.some(todo => !todo.isCompleted);
 };
 
 const toggleTodoCompleted = (id) => {
@@ -93,7 +93,8 @@ const removeTodo = (id) => {
 const clearCompletedTodo = () => {
   todoList.forEach(todo => {
     todo.isCompleted = false;
-  })
+  });
+  updateIsAllCompleted();
   saveToLocalStorage();
 };
 

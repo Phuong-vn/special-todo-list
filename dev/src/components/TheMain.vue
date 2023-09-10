@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick } from 'vue';
+import { nextTick, onUpdated } from 'vue';
 import { todoList, toggleAll, isAllCompleted, toggleTodoCompleted, initEdit, editing, completeEdit, escapeEdit, removeTodo } from '../store.js';
 
 const props = defineProps({
@@ -20,21 +20,26 @@ const getCurrentTodoList = () => {
   return todoList;
 };
 
+onUpdated(() => {
+  console.log(isAllCompleted.value);
+});
+
 </script>
 
 <template>
   <section class="main" v-if="todoList.length">
-    <input
-      id="toggle-all"
-      class="toggle-all"
-      type="checkbox"
-      :checked="isAllCompleted"
-    >
     <label
-      for="toggle-all"
-      @click="toggleAll"
+    for="toggle-all"
+    class="toggle-all-label"
+    @click="toggleAll"
     >
-      Mark all as complete
+      <input
+        id="toggle-all"
+        class="toggle-all"
+        type="checkbox"
+        :checked="isAllCompleted"
+      >
+      <span>❯</span>
     </label>
     <ul class="todo-list">
       <li
